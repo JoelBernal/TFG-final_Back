@@ -1,6 +1,9 @@
 using api_librerias_paco.Models;
 using api_librerias_paco.Services;
+using api_librerias_paco.Context;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_librerias_paco.Controllers
 {
@@ -8,64 +11,164 @@ namespace api_librerias_paco.Controllers
     [Route("[controller]")]
     public class TiendasController : ControllerBase
     {
-        public TiendasController()
+        private readonly LibreriaContext _dbContext;
+        public TiendasController(LibreriaContext dbContext)
         {
+            _dbContext = dbContext;
         }
 
-        // GET all action
+        // // GET all action
+        // [HttpGet]
+        // public ActionResult<List<Tiendas>> GetAll() =>
+        // TiendasService.GetAll();
+
+        // // GET by Id action
+        // [HttpGet("{id}")]
+        // public ActionResult<Tiendas> Get(int id)
+        // {
+        //     var tienda1 = TiendasService.Get(id);
+
+        //     if (tienda1 == null)
+        //         return NotFound();
+
+        //     return tienda1;
+        // }
+
+        // // POST action
+        // [HttpPost]
+        // public IActionResult Create(Tiendas tiendas)
+        // {
+        //     TiendasService.Add(tiendas);
+        //     return CreatedAtAction(nameof(Get), new { id = tiendas.Id }, tiendas);
+        // }
+
+        // // PUT action
+        // [HttpPut("{id}")]
+        // public IActionResult Update(int id, Tiendas tiendas)
+        // {
+        //     if (id != tiendas.Id)
+        //         return BadRequest();
+
+        //     var existingTienda = TiendasService.Get(id);
+        //     if (existingTienda is null)
+        //         return NotFound();
+
+        //     TiendasService.Update(tiendas);
+
+        //     return NoContent();
+        // }
+
+        // // DELETE action
+        // [HttpDelete("{id}")]
+        // public IActionResult Delete(int id)
+        // {
+        //     var tnd = TiendasService.Get(id);
+
+        //     if (tnd is null)
+        //         return NotFound();
+
+        //     TiendasService.Delete(id);
+
+        //     return NoContent();
+        // }
+
+        // GET: api/Tiendas
         [HttpGet]
-        public ActionResult<List<Tiendas>> GetAll() =>
-        TiendasService.GetAll();
+        public async Task<ActionResult<IEnumerable<Tiendas>>> GetTiendas([FromQuery] string? orderBy = "")
+        {
+            IQueryable<Tiendas> tiendasQuery = _dbContext.Tiendas;
 
-        // GET by Id action
+            if (orderBy == null)
+            {
+                return await _dbContext.Tiendas.ToListAsync();
+            }
+
+            if (orderBy == "MasTrabajadores")
+            {
+                tiendasQuery = tiendasQuery.OrderByDescending(t => t.trabajadores);
+            }
+
+            if (orderBy == "MenosTrabajadores")
+            {
+                tiendasQuery = tiendasQuery.OrderBy(t => t.trabajadores);
+            }
+
+            var donOmar = await tiendasQuery.ToListAsync();
+
+            return Ok(donOmar);
+        }
+
+        // GET clientes de la base por id
         [HttpGet("{id}")]
-        public ActionResult<Tiendas> Get(int id)
+        public async Task<ActionResult<Tiendas>> GetTiendas(int id)
         {
-            var tienda1 = TiendasService.Get(id);
+            if (_dbContext.Tiendas == null)
+            {
+                return BadRequest("No hay ninguna tienda con ese Id asignado");
+            }
+            var tienda = await _dbContext.Tiendas.FindAsync(id);
 
-            if (tienda1 == null)
-                return NotFound();
+            if (tienda == null)
+            {
+                return BadRequest("No hay ninguna tienda con ese Id asignado");
+            }
+            return tienda;
 
-            return tienda1;
         }
 
-        // POST action
-        [HttpPost]
-        public IActionResult Create(Tiendas tiendas)
+        [HttpPost("")]
+
+        public async Task<ActionResult<Tiendas>> PostTiendas(Tiendas tiendas)
         {
-            TiendasService.Add(tiendas);
-            return CreatedAtAction(nameof(Get), new { id = tiendas.id }, tiendas);
+            _dbContext.Tiendas.Add(tiendas);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetTiendas), new { id = tiendas.Id }, tiendas);
         }
 
-        // PUT action
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, Tiendas tiendas)
+        [HttpPut("")]
+        public async Task<IActionResult> PutClientes([FromBody] Tiendas tiendas)
         {
-            if (id != tiendas.id)
-                return BadRequest();
+            _dbContext.Entry(tiendas).State = EntityState.Modified;
 
-            var existingTienda = TiendasService.Get(id);
-            if (existingTienda is null)
-                return NotFound();
+            try
+            {
+                _dbContext.Tiendas.Update(tiendas);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
 
-            TiendasService.Update(tiendas);
-
-            return NoContent();
+                throw;
+            }
+            return Ok();
         }
 
-        // DELETE action
+        private bool TiendasExists(long id)
+        {
+            return (_dbContext.Tiendas?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        public async Task<IActionResult> DeleteTiendas(int id)
         {
-            var tnd = TiendasService.Get(id);
-
-            if (tnd is null)
+            if (_dbContext.Tiendas == null)
+            {
                 return NotFound();
-
-            TiendasService.Delete(id);
+            }
+            var tienda = await _dbContext.Tiendas.FindAsync(id);
+            if (tienda == null)
+            {
+                return NotFound();
+            }
+            _dbContext.Tiendas.Remove(tienda);
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
+
+
     }
 }
 
