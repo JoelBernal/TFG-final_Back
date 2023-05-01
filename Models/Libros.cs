@@ -14,7 +14,7 @@ namespace api_librerias_paco.Models
 
         public int? Paginas { get; set; }
 
-        public bool? enVenta { get; set; }
+        public bool? EnVenta { get; set; }
 
         public string? FechaPublicacion { get; set; }
         

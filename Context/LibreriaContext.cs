@@ -15,10 +15,10 @@ namespace api_librerias_paco.Context
         public DbSet<Tiendas> Tiendas { get; set; } = null!;
         public DbSet<LibrosClientes> LibrosClientes { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=tcp:apilibreriaspaco.database.windows.net,1433;Initial Catalog=LibreriaBBDD;Persist Security Info=False;User ID=SuperAdmin;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        }
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     optionsBuilder.UseSqlServer(@"Server=tcp:apilibreriaspaco.database.windows.net,1433;Initial Catalog=LibreriaBBDD;Persist Security Info=False;User ID=SuperAdmin;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        // }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace api_librerias_paco.Context
             modelBuilder.Entity<Tiendas>()
             .HasOne(p => p.Libros)
             .WithMany(p => p.Tiendas)
-            .HasForeignKey(p => p.libroId)
+            .HasForeignKey(p => p.LibroId)
             .OnDelete(DeleteBehavior.NoAction);
 
               modelBuilder.Entity<LibrosClientes>()

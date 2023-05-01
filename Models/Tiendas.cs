@@ -7,15 +7,18 @@ namespace api_librerias_paco.Models
 
         
 
-        public string? comunidad { get; set; }
-        public string? localidad { get; set; }
-        public string? calle { get; set; }
+        public string? Comunidad { get; set; }
+        public string? Localidad { get; set; }
+        public string? Calle { get; set; }
 
-        public int? codigopostal { get; set; }
+        public int? Codigopostal { get; set; }
 
-        public int? trabajadores { get; set; }
+        public int? Trabajadores { get; set; }
 
-        public  int libroId {get;set;}
+        public string? HorarioAtencion { get; set; }
+
+
+        public  int LibroId {get;set;}
 
         public virtual Libros Libros { get; set; }
         
