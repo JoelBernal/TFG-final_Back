@@ -27,6 +27,7 @@ public class ClientesService
             Contrasenya = cliente.Contrasenya,
             NombreUser = cliente.NombreUser,
             Saldo = cliente.Saldo,
+            Rol = cliente.Rol,
             FechaCreacion = cliente.FechaCreacion,
             // Agrega más campos si es necesario
         };
