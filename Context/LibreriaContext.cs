@@ -14,6 +14,7 @@ namespace api_librerias_paco.Context
         public DbSet<Clientes> Clientes { get; set; } = null!;
         public DbSet<Tiendas> Tiendas { get; set; } = null!;
         public DbSet<LibrosClientes> LibrosClientes { get; set; } = null!;
+        public DbSet<Empleados> Empleados { get; set; } = null!;
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {
