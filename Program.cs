@@ -11,6 +11,14 @@ builder.Services.AddDbContext<LibreriaContext>(options =>
 
 builder.Services.AddTransient<LibreriaContext>();
 
+builder.Services.AddTransient<ICarritoRepository, CarritoService>();
+builder.Services.AddTransient<ICategoriaRepository, CategoriaService>();
+builder.Services.AddTransient<IClientesRepository, ClientesService>();
+builder.Services.AddTransient<IEmpleadoRepository, EmpleadoService>();
+builder.Services.AddTransient<ILibroRepository, LibroService>();
+builder.Services.AddTransient<ITiendaRepository, TiendaService>();
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

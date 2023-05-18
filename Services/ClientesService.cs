@@ -1,49 +1,38 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-namespace api_librerias_paco.Services
+public class ClientesService : IClientesRepository
 {
-    public static class ClientesService
+
+    private readonly LibreriaContext _dbContext;
+
+    public ClientesService(LibreriaContext dbContext)
     {
-        static List<Clientes> _Clientes { get; set; }
-        static int nextId = 3;
-        static ClientesService()
-        {
-            _Clientes = new List<Clientes>
-        {
-            new Clientes { Correo = "admin@admin.com" , Contraseña = "admin123", NombreUser = "admin" , saldo=0, Id=1  },
-            new Clientes { Correo = "prueba1@gmail.com" , Contraseña = "prueba123", NombreUser = "develop" , saldo=0, Id=2 }
-        };
-        }
-
-        public static List<Clientes> GetAll() => _Clientes;
-
-        public static Clientes? Get(int id) => _Clientes.FirstOrDefault(p => p.Id == id);
-        public static Clientes? Get(string correo) => _Clientes.FirstOrDefault(p => p.Correo == correo);
-
-        public static void Add(Clientes clientes)
-        {
-            clientes.Id = nextId++;
-            _Clientes.Add(clientes);
-        }
-
-        public static void Delete(int id)
-        {
-            var clientes = Get(id);
-            if (clientes is null)
-                return;
-
-            _Clientes.Remove(clientes);
-        }
-
-        public static void Update(Clientes clientes)
-        {
-            var index = _Clientes.FindIndex(p => p.Id == clientes.Id);
-            if (index == -1)
-                return;
-
-            _Clientes[index] = clientes;
-        }
+        _dbContext = dbContext;
     }
 
-}
+    public ClienteDTO ObtenerClientePorId(int id)
+    {
+        Clientes cliente = _dbContext.Clientes.FirstOrDefault(c => c.Id == id);
+        ClienteDTO clienteDTO = ConvertirAClienteDTO(cliente);
+        return clienteDTO;
+    }
 
+
+    private ClienteDTO ConvertirAClienteDTO(Clientes cliente)
+    {
+        // Lógica de conversión aquí
+        // Ejemplo:
+        return new ClienteDTO
+        {
+            Id = cliente.Id,
+            Correo = cliente.Correo,
+            Contrasenya = cliente.Contrasenya,
+            NombreUser = cliente.NombreUser,
+            Saldo = cliente.Saldo,
+            Rol = cliente.Rol,
+            FechaCreacion = cliente.FechaCreacion,
+            // Agrega más campos si es necesario
+        };
+    }
+}
