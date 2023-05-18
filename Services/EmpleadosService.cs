@@ -1,17 +1,18 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class EmpleadoService
+public class EmpleadoService : IEmpleadoRepository
 {
-    private readonly IEmpleadoRepository _empleadoRepository;
+    private readonly LibreriaContext _dbContext;
 
-    public EmpleadoService(IEmpleadoRepository empleadoRepository)
+    public EmpleadoService(LibreriaContext dbContext)
     {
-        _empleadoRepository = empleadoRepository;
+        _dbContext = dbContext;
     }
 
     public EmpleadoDTO ObtenerEmpleadoPorId(int id)
     {
-        Empleados empleado = _empleadoRepository.ObtenerEmpleadoPorId(id); // Asegúrate de que este método tenga el nombre correcto.
+        Empleados empleado = _dbContext.Empleados.FirstOrDefault(c => c.Id == id); // Asegúrate de que este método tenga el nombre correcto.
         EmpleadoDTO empleadoDTO = ConvertirAEmpleadoDTO(empleado);
         return empleadoDTO;
     }

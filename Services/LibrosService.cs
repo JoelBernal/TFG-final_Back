@@ -1,17 +1,18 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class LibroService
+public class LibroService : ILibroRepository
 {
-    private readonly ILibroRepository _libroRepository;
+    private readonly LibreriaContext _dbContext;
 
-    public LibroService(ILibroRepository libroRepository)
+    public LibroService(LibreriaContext dbContext)
     {
-        _libroRepository = libroRepository;
+        _dbContext = dbContext;
     }
 
     public LibroDTO ObtenerLibroPorId(int id)
     {
-        Libros libro = _libroRepository.ObtenerLibroPorId(id);
+        Libros libro = _dbContext.Libro.FirstOrDefault(c => c.Id == id);
         LibroDTO libroDTO = ConvertirALibroDTO(libro);
         return libroDTO;
     }

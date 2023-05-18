@@ -1,17 +1,18 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class CarritoService
+public class CarritoService : ICarritoRepository
 {
-    private readonly ICarritoRepository _carritoRepository;
+    private readonly LibreriaContext _dbContext;
 
-    public CarritoService(ICarritoRepository carritoRepository)
+    public CarritoService(LibreriaContext dbContext)
     {
-        _carritoRepository = carritoRepository;
+        _dbContext = dbContext;
     }
 
     public CarritoDTO ObtenerCarritoPorId(int id)
     {
-        Carrito carrito = _carritoRepository.ObtenerCarritoPorId(id);
+        Carrito carrito = _dbContext.Carrito.FirstOrDefault(c => c.Id == id);
         CarritoDTO carritoDTO = ConvertirACarritoDTO(carrito);
         return carritoDTO;
     }

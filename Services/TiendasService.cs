@@ -1,17 +1,18 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class TiendaService
+public class TiendaService : ITiendaRepository
 {
-    private readonly ITiendaRepository _tiendaRepository;
+    private readonly LibreriaContext _dbContext;
 
-    public TiendaService(ITiendaRepository tiendaRepository)
+    public TiendaService(LibreriaContext dbContext)
     {
-        _tiendaRepository = tiendaRepository;
+        _dbContext = dbContext;
     }
 
     public TiendaDTO ObtenerTiendaPorId(int id)
     {
-        Tiendas tienda = _tiendaRepository.ObtenerTiendaPorId(id);
+        Tiendas tienda = _dbContext.Tiendas.FirstOrDefault(c => c.Id == id);
         TiendaDTO tiendaDTO = ConvertirATiendaDTO(tienda);
         return tiendaDTO;
     }

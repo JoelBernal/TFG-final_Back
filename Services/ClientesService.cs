@@ -1,20 +1,23 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class ClientesService
+public class ClientesService : IClientesRepository
 {
-    private readonly IClientesRepository _clientesRepository;
 
-    public ClientesService(IClientesRepository clientesRepository)
+    private readonly LibreriaContext _dbContext;
+
+    public ClientesService(LibreriaContext dbContext)
     {
-        _clientesRepository = clientesRepository;
+        _dbContext = dbContext;
     }
 
     public ClienteDTO ObtenerClientePorId(int id)
     {
-        Clientes cliente = _clientesRepository.ObtenerClientePorId(id);
+        Clientes cliente = _dbContext.Clientes.FirstOrDefault(c => c.Id == id);
         ClienteDTO clienteDTO = ConvertirAClienteDTO(cliente);
         return clienteDTO;
     }
+
 
     private ClienteDTO ConvertirAClienteDTO(Clientes cliente)
     {

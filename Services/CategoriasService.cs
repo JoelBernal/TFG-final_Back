@@ -1,17 +1,18 @@
 using api_librerias_paco.Models;
+using api_librerias_paco.Context;
 
-public class CategoriaService
+public class CategoriaService : ICategoriaRepository
 {
-    private readonly ICategoriaRepository _categoriaRepository;
+    private readonly LibreriaContext _dbContext;
 
-    public CategoriaService(ICategoriaRepository categoriaRepository)
+    public CategoriaService(LibreriaContext dbContext)
     {
-        _categoriaRepository = categoriaRepository;
+        _dbContext = dbContext;
     }
 
     public CategoriaDTO ObtenerCategoriaPorId(int id)
     {
-        Categorias categoria = _categoriaRepository.ObtenerCategoriaPorId(id);
+        Categorias categoria = _dbContext.Categorias.FirstOrDefault(c => c.Id == id);
         CategoriaDTO categoriaDTO = ConvertirACategoriaDTO(categoria);
         return categoriaDTO;
     }

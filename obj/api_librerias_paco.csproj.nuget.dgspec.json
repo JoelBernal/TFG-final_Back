@@ -1,22 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj": {}
+    "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj": {
+    "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj",
+        "projectUniqueName": "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj",
         "projectName": "api_librerias_paco",
-        "projectPath": "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj",
-        "packagesPath": "C:\\Users\\joelj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\obj\\",
+        "projectPath": "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\api_librerias_paco.csproj",
+        "packagesPath": "C:\\Users\\Joel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\joelj\\Desktop\\TFG\\TFG-final_Back\\NuGet.Config",
-          "C:\\Users\\joelj\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Joel\\Desktop\\TFG\\TFG-final_Back\\NuGet.Config",
+          "C:\\Users\\Joel\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -82,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
         }
       }
     }
