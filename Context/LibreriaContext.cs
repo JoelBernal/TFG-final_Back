@@ -28,26 +28,26 @@ namespace api_librerias_paco.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 { 
 
-            modelBuilder.Entity<Tiendas>()
-            .HasOne(p => p.Libros)
-            .WithMany(p => p.Tiendas)
-            .HasForeignKey(p => p.LibroId)
-            .OnDelete(DeleteBehavior.NoAction);
+        //     modelBuilder.Entity<Tiendas>()
+        //     .HasOne(p => p.Libros)
+        //     .WithMany(p => p.Tiendas)
+        //     .HasForeignKey(p => p.LibroId)
+        //     .OnDelete(DeleteBehavior.NoAction);
 
-              modelBuilder.Entity<LibrosClientes>()
-            .HasKey(lc => new { lc.Id });
+        //       modelBuilder.Entity<LibrosClientes>()
+        //     .HasKey(lc => new { lc.Id });
 
-            //conexion tabla intermedia y libros
-                modelBuilder.Entity<LibrosClientes>()
-            .HasOne(lc => lc.Libro) 
-            .WithMany(l => l.LibrosClientes);
-            //.HasForeignKey(lc => lc.Idlibro);
+        //     //conexion tabla intermedia y libros
+        //         modelBuilder.Entity<LibrosClientes>()
+        //     .HasOne(lc => lc.Libro) 
+        //     .WithMany(l => l.LibrosClientes);
+        //     //.HasForeignKey(lc => lc.Idlibro);
 
-            //conexion tabla intermedia y clientes
-                modelBuilder.Entity<LibrosClientes>()
-            .HasOne(lc => lc.Cliente) 
-            .WithMany(c => c.LibrosClientes);
-           // .HasForeignKey(lc => lc.IdCliente);
+        //     //conexion tabla intermedia y clientes
+        //         modelBuilder.Entity<LibrosClientes>()
+        //     .HasOne(lc => lc.Cliente) 
+        //     .WithMany(c => c.LibrosClientes);
+        //    // .HasForeignKey(lc => lc.IdCliente);
 
 
 }
