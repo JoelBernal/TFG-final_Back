@@ -19,12 +19,13 @@ namespace api_librerias_paco.Context
         public DbSet<Categorias> Categorias { get; set; } = null!;
 
 
+
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {
              optionsBuilder.UseSqlServer(@"Server=tcp:apitfgfinal.database.windows.net,1433;Initial Catalog=BbddApiTfgFinal;Persist Security Info=False;User ID=TfgFinalJoelEnrique;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
          }
 
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
