@@ -19,13 +19,28 @@ namespace api_librerias_paco.Controllers
 
         // GET: api/Tiendas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tiendas>>> GetTiendas([FromQuery] string? orderBy = "")
+        public async Task<ActionResult<IEnumerable<TiendaDTO>>> GetTiendas([FromQuery] string? orderBy = "")
         {
             IQueryable<Tiendas> tiendasQuery = _dbContext.Tiendas;
 
             if (orderBy == null)
             {
-                return await _dbContext.Tiendas.ToListAsync();
+                var tiendas = await _dbContext.Tiendas.ToListAsync();
+
+                // Mapea las entidades Tiendas a sus correspondientes DTO
+                var tiendasDTO = tiendas.Select(t => new TiendaDTO
+                {
+                    Id = t.Id,
+                    Comunidad = t.Comunidad,
+                    Localidad = t.Localidad,
+                    Calle = t.Calle,
+                    CodigoPostal = t.Codigopostal,
+                    Trabajadores = t.Trabajadores,
+                    HorarioAtencion = t.HorarioAtencion,
+                    // LibroId = t.LibroId
+                });
+
+                return Ok(tiendasDTO);
             }
 
             if (orderBy == "MasTrabajadores")
@@ -38,55 +53,126 @@ namespace api_librerias_paco.Controllers
                 tiendasQuery = tiendasQuery.OrderBy(t => t.Trabajadores);
             }
 
-            var donOmar = await tiendasQuery.ToListAsync();
+            var tiendasOrdenadas = await tiendasQuery.ToListAsync();
 
-            return Ok(donOmar);
+            // Mapea las entidades Tiendas ordenadas a sus correspondientes DTO
+            var tiendasOrdenadasDTO = tiendasOrdenadas.Select(t => new TiendaDTO
+            {
+                Id = t.Id,
+                Comunidad = t.Comunidad,
+                Localidad = t.Localidad,
+                Calle = t.Calle,
+                CodigoPostal = t.Codigopostal,
+                Trabajadores = t.Trabajadores,
+                HorarioAtencion = t.HorarioAtencion,
+                // LibroId = t.LibroId
+            });
+
+            return Ok(tiendasOrdenadasDTO);
         }
 
-        // GET clientes de la base por id
+        // GET tiendas de la base por id
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tiendas>> GetTiendas(int id)
+        public async Task<ActionResult<TiendaDTO>> GetTiendas(int id)
         {
-            if (_dbContext.Tiendas == null)
-            {
-                return BadRequest("No hay ninguna tienda con ese Id asignado");
-            }
             var tienda = await _dbContext.Tiendas.FindAsync(id);
 
             if (tienda == null)
             {
                 return BadRequest("No hay ninguna tienda con ese Id asignado");
             }
-            return tienda;
 
+            // Mapea la entidad Tiendas a su correspondiente DTO
+            var tiendaDTO = new TiendaDTO
+            {
+                Id = tienda.Id,
+                Comunidad = tienda.Comunidad,
+                Localidad = tienda.Localidad,
+                Calle = tienda.Calle,
+                CodigoPostal = tienda.Codigopostal,
+                Trabajadores = tienda.Trabajadores,
+                HorarioAtencion = tienda.HorarioAtencion,
+                // LibroId = tienda.LibroId
+            };
+
+            return tiendaDTO;
         }
 
         [HttpPost("")]
-
-        public async Task<ActionResult<Tiendas>> PostTiendas(Tiendas tiendas)
+        public async Task<ActionResult<TiendaDTO>> PostTiendas(TiendaDTO tiendaDTO)
         {
-            _dbContext.Tiendas.Add(tiendas);
+            // Realiza cualquier validación o transformación necesaria en el DTO antes de guardarlo en la base de datos
+
+            var tienda = new Tiendas
+            {
+                // Mapea los valores del DTO a una instancia de la entidad original Tiendas
+                Comunidad = tiendaDTO.Comunidad,
+                Localidad = tiendaDTO.Localidad,
+                Calle = tiendaDTO.Calle,
+                Codigopostal = tiendaDTO.CodigoPostal,
+                Trabajadores = tiendaDTO.Trabajadores,
+                HorarioAtencion = tiendaDTO.HorarioAtencion,
+                // LibroId = tiendaDTO.LibroId
+            };
+
+            _dbContext.Tiendas.Add(tienda);
             await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetTiendas), new { id = tiendas.Id }, tiendas);
+
+            // Mapea la entidad Tiendas creada a su correspondiente DTO
+            var nuevaTiendaDTO = new TiendaDTO
+            {
+                Id = tienda.Id,
+                Comunidad = tienda.Comunidad,
+                Localidad = tienda.Localidad,
+                Calle = tienda.Calle,
+                CodigoPostal = tienda.Codigopostal,
+                Trabajadores = tienda.Trabajadores,
+                HorarioAtencion = tienda.HorarioAtencion,
+                // LibroId = tienda.LibroId
+            };
+
+            return CreatedAtAction(nameof(GetTiendas), new { id = nuevaTiendaDTO.Id }, nuevaTiendaDTO);
         }
 
-        [HttpPut("")]
-        public async Task<IActionResult> PutClientes([FromBody] Tiendas tiendas)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTiendas(int id, TiendaDTO tiendaDTO)
         {
-            _dbContext.Entry(tiendas).State = EntityState.Modified;
+            if (id != tiendaDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            var tienda = await _dbContext.Tiendas.FindAsync(id);
+
+            if (tienda == null)
+            {
+                return NotFound();
+            }
+
+            // Realiza cualquier validación o transformación necesaria en el DTO antes de actualizar la entidad
+
+            // Actualiza los valores de la entidad original Tiendas con los valores del DTO
+            tienda.Comunidad = tiendaDTO.Comunidad;
+            tienda.Localidad = tiendaDTO.Localidad;
+            tienda.Calle = tiendaDTO.Calle;
+            tienda.Codigopostal = tiendaDTO.CodigoPostal;
+            tienda.Trabajadores = tiendaDTO.Trabajadores;
+            tienda.HorarioAtencion = tiendaDTO.HorarioAtencion;
+            // tienda.LibroId = tiendaDTO.LibroId;
 
             try
             {
-                _dbContext.Tiendas.Update(tiendas);
+                _dbContext.Tiendas.Update(tienda);
                 await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-
                 throw;
             }
+
             return Ok();
         }
+
 
         private bool TiendasExists(long id)
         {
@@ -95,24 +181,20 @@ namespace api_librerias_paco.Controllers
 
 
         [HttpDelete("{id}")]
-
         public async Task<IActionResult> DeleteTiendas(int id)
         {
-            if (_dbContext.Tiendas == null)
-            {
-                return NotFound();
-            }
             var tienda = await _dbContext.Tiendas.FindAsync(id);
+
             if (tienda == null)
             {
                 return NotFound();
             }
+
             _dbContext.Tiendas.Remove(tienda);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
-
 
     }
 }

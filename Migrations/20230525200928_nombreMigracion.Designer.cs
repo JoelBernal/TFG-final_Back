@@ -12,7 +12,7 @@ using api_librerias_paco.Context;
 namespace api_librerias_paco.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20230521144144_nombreMigracion")]
+    [Migration("20230525200928_nombreMigracion")]
     partial class nombreMigracion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,7 +131,12 @@ namespace api_librerias_paco.Migrations
                     b.Property<string>("Residencia")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TiendaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TiendaId");
 
                     b.ToTable("Empleados");
                 });
@@ -146,6 +151,9 @@ namespace api_librerias_paco.Migrations
 
                     b.Property<string>("Autor")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("EnVenta")
                         .HasColumnType("bit");
@@ -163,6 +171,8 @@ namespace api_librerias_paco.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
 
                     b.ToTable("Libro");
                 });
@@ -216,11 +226,11 @@ namespace api_librerias_paco.Migrations
                     b.Property<string>("Comunidad")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EmpleadoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("HorarioAtencion")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LibroId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("LibrosId")
                         .HasColumnType("int");
@@ -233,9 +243,33 @@ namespace api_librerias_paco.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmpleadoId");
+
                     b.HasIndex("LibrosId");
 
                     b.ToTable("Tiendas");
+                });
+
+            modelBuilder.Entity("api_librerias_paco.Models.Empleados", b =>
+                {
+                    b.HasOne("api_librerias_paco.Models.Tiendas", "Tienda")
+                        .WithMany("Empleados")
+                        .HasForeignKey("TiendaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tienda");
+                });
+
+            modelBuilder.Entity("api_librerias_paco.Models.Libros", b =>
+                {
+                    b.HasOne("api_librerias_paco.Models.Categorias", "Categorias")
+                        .WithMany("Libros")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categorias");
                 });
 
             modelBuilder.Entity("api_librerias_paco.Models.LibrosClientes", b =>
@@ -255,10 +289,19 @@ namespace api_librerias_paco.Migrations
 
             modelBuilder.Entity("api_librerias_paco.Models.Tiendas", b =>
                 {
-                    b.HasOne("api_librerias_paco.Models.Libros", "Libros")
+                    b.HasOne("api_librerias_paco.Models.Empleados", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId");
+
+                    b.HasOne("api_librerias_paco.Models.Libros", null)
                         .WithMany("Tiendas")
                         .HasForeignKey("LibrosId");
 
+                    b.Navigation("Empleado");
+                });
+
+            modelBuilder.Entity("api_librerias_paco.Models.Categorias", b =>
+                {
                     b.Navigation("Libros");
                 });
 
@@ -272,6 +315,11 @@ namespace api_librerias_paco.Migrations
                     b.Navigation("LibrosClientes");
 
                     b.Navigation("Tiendas");
+                });
+
+            modelBuilder.Entity("api_librerias_paco.Models.Tiendas", b =>
+                {
+                    b.Navigation("Empleados");
                 });
 #pragma warning restore 612, 618
         }

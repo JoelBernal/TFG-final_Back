@@ -17,41 +17,44 @@ namespace api_librerias_paco.Context
         public DbSet<Empleados> Empleados { get; set; } = null!;
         public DbSet<Carrito> Carrito { get; set; } = null!;
         public DbSet<Categorias> Categorias { get; set; } = null!;
-        
 
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseSqlServer(@"Server=tcp:apilibreriaspaco.database.windows.net,1433;Initial Catalog=LibreriaBBDD;Persist Security Info=False;User ID=SuperAdmin;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        // }
+
+         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+         {
+             optionsBuilder.UseSqlServer(@"Server=tcp:apitfgfinal.database.windows.net,1433;Initial Catalog=BbddApiTfgFinal;Persist Security Info=False;User ID=TfgFinalJoelEnrique;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+         }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-{ 
+        {
 
-        //     modelBuilder.Entity<Tiendas>()
-        //     .HasOne(p => p.Libros)
-        //     .WithMany(p => p.Tiendas)
-        //     .HasForeignKey(p => p.LibroId)
-        //     .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Tiendas>()
+            .HasMany(t => t.Empleados)
+            .WithOne(e => e.Tienda)
+            .HasForeignKey(e => e.TiendaId);
 
-        //       modelBuilder.Entity<LibrosClientes>()
-        //     .HasKey(lc => new { lc.Id });
+            modelBuilder.Entity<Libros>()
+                .HasOne(l => l.Categorias)
+                .WithMany(c => c.Libros)
+                .HasForeignKey(l => l.CategoriaId);
 
-        //     //conexion tabla intermedia y libros
-        //         modelBuilder.Entity<LibrosClientes>()
-        //     .HasOne(lc => lc.Libro) 
-        //     .WithMany(l => l.LibrosClientes);
-        //     //.HasForeignKey(lc => lc.Idlibro);
+            modelBuilder.Entity<LibrosClientes>()
+           .HasKey(lc => new { lc.Id });
 
-        //     //conexion tabla intermedia y clientes
-        //         modelBuilder.Entity<LibrosClientes>()
-        //     .HasOne(lc => lc.Cliente) 
-        //     .WithMany(c => c.LibrosClientes);
-        //    // .HasForeignKey(lc => lc.IdCliente);
+            //conexion tabla intermedia y libros
+            modelBuilder.Entity<LibrosClientes>()
+        .HasOne(lc => lc.Libro)
+        .WithMany(l => l.LibrosClientes);
+            //.HasForeignKey(lc => lc.Idlibro);
+
+            //conexion tabla intermedia y clientes
+            modelBuilder.Entity<LibrosClientes>()
+           .HasOne(lc => lc.Cliente)
+           .WithMany(c => c.LibrosClientes);
+            // .HasForeignKey(lc => lc.IdCliente);
 
 
+        }
+
+    }
 }
-
-
-
-}}

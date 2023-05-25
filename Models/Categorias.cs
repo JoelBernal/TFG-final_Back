@@ -1,9 +1,11 @@
 namespace api_librerias_paco.Models
 {
+   
 
     public class Categorias
 
     {       
+      
         public int Id { get; set; }
 
         public string? Nombre { get; set; }
@@ -12,7 +14,7 @@ namespace api_librerias_paco.Models
 
         public string? Imagen { get; set; }
 
-        //public int LibrosId { get; set; }
+        public List<Libros> Libros { get; set; } // Navigation property
     
     }
 }

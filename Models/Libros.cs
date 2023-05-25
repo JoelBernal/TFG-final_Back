@@ -22,5 +22,8 @@ namespace api_librerias_paco.Models
 
         public virtual ICollection<LibrosClientes> LibrosClientes { get; set; } 
 
+        public Categorias Categorias { get; set; } 
+        public int CategoriaId { get; set; } // Foreign key
+
     }
 }

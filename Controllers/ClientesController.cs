@@ -22,90 +22,141 @@ namespace api_librerias_paco.Controllers
 
         // GET: api/Clientes
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Clientes>>> GetClientes()
+        public async Task<ActionResult<IEnumerable<ClienteDTO>>> GetClientes()
         {
-            if (_dbContext.Clientes == null)
+            var clientes = await _dbContext.Clientes.ToListAsync();
+
+            // Mapea las entidades Clientes a sus correspondientes DTO
+            var clientesDTO = clientes.Select(c => new ClienteDTO
             {
-                return NotFound();
-            }
-            return await _dbContext.Clientes.ToListAsync();
+                Id = c.Id,
+                Correo = c.Correo,
+                Contrasenya = c.Contrasenya,
+                NombreUser = c.NombreUser,
+                Rol = c.Rol,
+                Saldo = c.Saldo,
+                FechaCreacion = c.FechaCreacion
+            }).ToList();
+
+            return clientesDTO;
         }
 
-        // GET clientes de la base por id
         [HttpGet("{id}")]
-        public async Task<ActionResult<Clientes>> GetClientes(int id)
+        public async Task<ActionResult<ClienteDTO>> GetCliente(int id)
         {
-
-            ClienteDTO clientes = _clientesService.ObtenerClientePorId(id);
-
-            if (_dbContext.Clientes == null)
-            {
-                return NotFound();
-            }
             var cliente = await _dbContext.Clientes.FindAsync(id);
 
             if (cliente == null)
             {
-                return BadRequest("No se ha encontrado ningún cliente con ese Id");
+                return NotFound();
             }
-            return cliente;
 
+            // Mapea la entidad Cliente a su correspondiente DTO
+            var clienteDTO = new ClienteDTO
+            {
+                Id = cliente.Id,
+                Correo = cliente.Correo,
+                Contrasenya = cliente.Contrasenya,
+                NombreUser = cliente.NombreUser,
+                Rol = cliente.Rol,
+                Saldo = cliente.Saldo,
+                FechaCreacion = cliente.FechaCreacion
+            };
+
+            return clienteDTO;
         }
 
         [HttpPost("")]
-
-        public async Task<ActionResult<Clientes>> PostClientes(Clientes clientes)
+        public async Task<ActionResult<ClienteDTO>> PostCliente(ClienteDTO clienteDTO)
         {
-            _dbContext.Clientes.Add(clientes);
+            // Realiza cualquier validación o transformación necesaria en el DTO antes de guardarlo en la base de datos
+
+            var cliente = new Clientes
+            {
+                // Mapea los valores del DTO a una instancia de la entidad original Clientes
+                Correo = clienteDTO.Correo,
+                Contrasenya = clienteDTO.Contrasenya,
+                NombreUser = clienteDTO.NombreUser,
+                Rol = clienteDTO.Rol,
+                Saldo = clienteDTO.Saldo,
+                FechaCreacion = clienteDTO.FechaCreacion
+            };
+
+            _dbContext.Clientes.Add(cliente);
             await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetClientes), new { id = clientes.Id }, clientes);
+
+            // Mapea la entidad Cliente creada a su correspondiente DTO
+            var nuevoClienteDTO = new ClienteDTO
+            {
+                Id = cliente.Id,
+                Correo = cliente.Correo,
+                Contrasenya = cliente.Contrasenya,
+                NombreUser = cliente.NombreUser,
+                Rol = cliente.Rol,
+                Saldo = cliente.Saldo,
+                FechaCreacion = cliente.FechaCreacion
+            };
+
+            return CreatedAtAction(nameof(GetCliente), new { id = nuevoClienteDTO.Id }, nuevoClienteDTO);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClientes([FromBody] Clientes clientes)
+        public async Task<IActionResult> PutCliente(int id, ClienteDTO clienteDTO)
         {
-            _dbContext.Entry(clientes).State = EntityState.Modified;
+            if (id != clienteDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            var cliente = await _dbContext.Clientes.FindAsync(id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            // Realiza cualquier validación o transformación necesaria en el DTO antes de actualizar la entidad
+
+            // Actualiza los valores de la entidad original Clientes con los valores del DTO
+            cliente.Correo = clienteDTO.Correo;
+            cliente.Contrasenya = clienteDTO.Contrasenya;
+            cliente.NombreUser = clienteDTO.NombreUser;
+            cliente.Rol = clienteDTO.Rol;
+            cliente.Saldo = clienteDTO.Saldo;
+            cliente.FechaCreacion = clienteDTO.FechaCreacion;
 
             try
             {
-                _dbContext.Clientes.Update(clientes);
+                _dbContext.Clientes.Update(cliente);
                 await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-
                 throw;
             }
+
             return Ok();
         }
 
-        private bool ClientesExists(long id)
-        {
-            return (_dbContext.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
-
-
+        // DELETE: api/Clientes/{id}
         [HttpDelete("{id}")]
-
-        public async Task<IActionResult> DeleteClientes(int id)
+        public async Task<IActionResult> DeleteCliente(int id)
         {
-            if (_dbContext.Clientes == null)
-            {
-                return NotFound();
-            }
             var cliente = await _dbContext.Clientes.FindAsync(id);
+
             if (cliente == null)
             {
                 return NotFound();
             }
+
             _dbContext.Clientes.Remove(cliente);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
-
     }
+
 }
+
 
 

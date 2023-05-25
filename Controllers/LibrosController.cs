@@ -46,7 +46,8 @@ namespace api_librerias_paco.Controllers
                     Autor = l.Autor,
                     Paginas = l.Paginas,
                     EnVenta = l.EnVenta,
-                    FechaPublicacion = l.FechaPublicacion
+                    FechaPublicacion = l.FechaPublicacion,
+                    CategoriaId = l.CategoriaId
                 });
 
                 return Ok(librosDTO);
@@ -63,7 +64,8 @@ namespace api_librerias_paco.Controllers
                 Autor = l.Autor,
                 Paginas = l.Paginas,
                 EnVenta = l.EnVenta,
-                FechaPublicacion = l.FechaPublicacion
+                FechaPublicacion = l.FechaPublicacion,
+                CategoriaId = l.CategoriaId
             });
 
             return Ok(librosOrdenadosDTO);
@@ -91,6 +93,7 @@ namespace api_librerias_paco.Controllers
                 Paginas = idlibro.Paginas,
                 EnVenta = idlibro.EnVenta,
                 FechaPublicacion = idlibro.FechaPublicacion,
+                CategoriaId = idlibro.CategoriaId
             };
 
             return LibroDTO;
@@ -111,7 +114,8 @@ namespace api_librerias_paco.Controllers
                 Autor = libroDTO.Autor,
                 Paginas = libroDTO.Paginas,
                 EnVenta = libroDTO.EnVenta,
-                FechaPublicacion = libroDTO.FechaPublicacion
+                FechaPublicacion = libroDTO.FechaPublicacion,
+                CategoriaId = libroDTO.CategoriaId
             };
 
             _dbContext.Libro.Add(libro);
@@ -126,7 +130,8 @@ namespace api_librerias_paco.Controllers
                 Autor = libro.Autor,
                 Paginas = libro.Paginas,
                 EnVenta = libro.EnVenta,
-                FechaPublicacion = libro.FechaPublicacion
+                FechaPublicacion = libro.FechaPublicacion,
+                CategoriaId = libro.CategoriaId
             };
 
             return CreatedAtAction(nameof(GetLibros), new { id = nuevoLibroDTO.Id }, nuevoLibroDTO);
@@ -156,6 +161,7 @@ namespace api_librerias_paco.Controllers
             libro.Paginas = libroDTO.Paginas;
             libro.EnVenta = libroDTO.EnVenta;
             libro.FechaPublicacion = libroDTO.FechaPublicacion;
+            libro.CategoriaId = libroDTO.CategoriaId;
 
             try
             {
@@ -205,7 +211,8 @@ namespace api_librerias_paco.Controllers
                 Autor = libro.Autor,
                 Paginas = libro.Paginas,
                 EnVenta = libro.EnVenta,
-                FechaPublicacion = libro.FechaPublicacion
+                FechaPublicacion = libro.FechaPublicacion,
+                CategoriaId = libro.CategoriaId
             };
 
             return libroDTO;

@@ -7,8 +7,9 @@ using api_librerias_paco.Models;
 
 namespace api_librerias_paco.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
+    [ApiController]
+
     public class LibrosClientesController : ControllerBase
     {
         private readonly LibreriaContext _dbContext;
@@ -20,63 +21,80 @@ namespace api_librerias_paco.Controllers
             _libroClienteService = libroClienteService;
         }
 
-        [HttpGet("{idCliente}")]
-        public async Task<ActionResult<List<LibrosClientes>>> GetLibrosCliente(int idCliente)
-        {
-            var librosCliente = await _libroClienteService.GetLibrosCliente(idCliente);
 
-            if (librosCliente == null)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LibrosClientesDTO>> GetLibros(int id)
+        {
+            var iduser = await _dbContext.LibrosClientes.FindAsync(id);
+
+            if (iduser == null)
             {
-                return NotFound();
+                return BadRequest("No se ha encontrado ningún registro con ese Id");
             }
 
-            return librosCliente;
+            var LibrosClienteDTO = new LibrosClientesDTO
+            {
+                Id = iduser.Id,
+                IdCliente = iduser.IdCliente,
+                Idlibro = iduser.Idlibro,
+                NombreLibro = iduser.NombreLibro,
+            };
+
+            return LibrosClienteDTO;
         }
+
+        [HttpGet("/{idCliente}")]
+        public async Task<ActionResult<IEnumerable<LibrosClientesDTO>>> GetLibrosIdCliente(int idCliente)
+        {
+            var librosDelCliente = await _dbContext.LibrosClientes
+                .Where(lc => lc.IdCliente == idCliente)
+                .ToListAsync();
+
+            if (!librosDelCliente.Any())
+            {
+                return NotFound("No se ha encontrado ningún libro para el cliente con ese Id");
+            }
+
+            var librosClienteDTO = librosDelCliente.Select(lc => new LibrosClientesDTO
+            {
+                Id = lc.Id,
+                IdCliente = lc.IdCliente,
+                Idlibro = lc.Idlibro,
+                NombreLibro = lc.NombreLibro,
+            }).ToList();
+
+            return Ok(librosClienteDTO);
+        }
+
+
 
         [HttpPost]
-        public async Task<ActionResult> AddLibroCliente(LibrosClientes libroCliente)
+        public async Task<ActionResult<LibrosClientesDTO>> PostLibroCliente(LibrosClientesDTO librosClientesDTO)
         {
-            bool exists = await _dbContext.LibrosClientes.AnyAsync(lc => lc.IdCliente == libroCliente.IdCliente && lc.Idlibro == libroCliente.Idlibro);
-            bool prueba = await _dbContext.Clientes.AnyAsync(cc => cc.Id == libroCliente.IdCliente);
-            bool prueba2 = await _dbContext.Libro.AnyAsync(cc => cc.Id == libroCliente.Idlibro);
+            var libro = await _dbContext.Libro.FindAsync(librosClientesDTO.Idlibro);
+            var cliente = await _dbContext.Clientes.FindAsync(librosClientesDTO.IdCliente);
 
-            if (exists)
+            if (libro == null || cliente == null)
             {
-                return BadRequest("El libro ya está asignado a este cliente.");
+                return BadRequest("Libro o cliente no encontrado");
             }
 
-            if (prueba == false)
+            var librosClientes = new LibrosClientes
             {
+                IdCliente = librosClientesDTO.IdCliente,
+                Idlibro = librosClientesDTO.Idlibro,
+                NombreLibro = librosClientesDTO.NombreLibro,
+            };
 
-                return BadRequest("No hay ningun cliente que tenga esta Id, tienes que asignar el libro a una Id que exista");
-            }
+            _dbContext.LibrosClientes.Add(librosClientes);
+            await _dbContext.SaveChangesAsync();
 
-            if (prueba2 == false)
-            {
+            librosClientesDTO.Id = librosClientes.Id;
 
-                return BadRequest("No hay ningun libro que tenga esta Id");
-            }
-
-            await _libroClienteService.AddLibroCliente(libroCliente);
-            return Ok();
+            return CreatedAtAction(nameof(GetLibros), new { id = librosClientesDTO.Id }, librosClientesDTO);
         }
 
-        [HttpPut("{idCliente}/{idLibro}")]
-        public async Task<ActionResult> UpdateLibroCliente(int idCliente, int idLibro, string nombreLibro)
-        {
-            await _libroClienteService.UpdateLibroCliente(idCliente, idLibro, nombreLibro);
 
-            return Ok();
-        }
 
-        [HttpDelete("{idCliente}/{idLibro}")]
-        public async Task<ActionResult> DeleteLibroCliente(int idCliente, int idLibro)
-        {
-            await _libroClienteService.DeleteLibroCliente(idCliente, idLibro);
-
-            return Ok();
-        }
     }
-
-
 }

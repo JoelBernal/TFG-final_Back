@@ -18,10 +18,14 @@ namespace api_librerias_paco.Models
         public string? HorarioAtencion { get; set; }
 
 
-        public  int LibroId {get;set;}
+        // public  int LibroId {get;set;}
 
-        public virtual Libros Libros { get; set; }
+        // public virtual Libros Libros { get; set; }
         
+
+
+        public List<Empleados> Empleados { get; set; } 
+        public Empleados Empleado { get; set; } 
 
     }
 }

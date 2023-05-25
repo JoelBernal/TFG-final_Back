@@ -1,7 +1,5 @@
 using api_librerias_paco.Models;
 using api_librerias_paco.Context;
-
-using api_librerias_paco.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,118 +18,144 @@ namespace api_librerias_paco.Controllers
             _empleadosService = empleadosService;
         }
 
-        // GET: api/Empleados
-        [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Empleados>>> GetEmpleados()
-        {
-            if (_dbContext.Empleados == null)
-            {
-                return NotFound();
-            }
-            return await _dbContext.Empleados.ToListAsync();
-        }
+[HttpGet("")]
+public async Task<ActionResult<IEnumerable<EmpleadoDTO>>> GetEmpleados()
+{
+    var empleados = await _dbContext.Empleados.ToListAsync();
 
-        // // GET Empleados de la base por id
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<Empleados>> GetEmpleados(int id)
-        // {
+    // Mapea las entidades Empleados a sus correspondientes DTO
+    var empleadosDTO = empleados.Select(e => new EmpleadoDTO
+    {
+        Id = e.Id,
+        Nombre = e.Nombre,
+        Apellidos = e.Apellidos,
+        Dni = e.Dni,
+        Correo = e.Correo,
+        Residencia = e.Residencia,
+        Nacionalidad = e.Nacionalidad,
+        TiendaId = e.TiendaId
+    }).ToList();
 
-        //     ClienteDTO empleados = _empleadosService.ObtenerClientePorId(id);
+    return empleadosDTO;
+}
 
-        //     if (_dbContext.Empleados == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     var empleados = await _dbContext.Empleados.FindAsync(id);
+[HttpGet("{id}")]
+public async Task<ActionResult<EmpleadoDTO>> GetEmpleado(int id)
+{
+    var empleado = await _dbContext.Empleados.FindAsync(id);
 
-        //     if (empleados == null)
-        //     {
-        //         return BadRequest("No se ha encontrado ningún cliente con ese Id");
-        //     }
-        //     return empleados;
+    if (empleado == null)
+    {
+        return BadRequest("No se ha encontrado ningún empleado con ese Id");
+    }
 
-        // }
+    // Mapea la entidad Empleado a su correspondiente DTO
+    var empleadoDTO = new EmpleadoDTO
+    {
+        Id = empleado.Id,
+        Nombre = empleado.Nombre,
+        Apellidos = empleado.Apellidos,
+        Dni = empleado.Dni,
+        Correo = empleado.Correo,
+        Residencia = empleado.Residencia,
+        Nacionalidad = empleado.Nacionalidad,
+        TiendaId = empleado.TiendaId
+    };
 
+    return empleadoDTO;
+}
 
+[HttpPost("")]
+public async Task<ActionResult<EmpleadoDTO>> PostEmpleado(EmpleadoDTO empleadoDTO)
+{
+    // Realiza cualquier validación o transformación necesaria en el DTO antes de guardarlo en la base de datos
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EmpleadoDTO>> GetEmpleados(int id)
-        {
-            var empleados = await _dbContext.Empleados.FindAsync(id);
+    var empleado = new Empleados
+    {
+        // Mapea los valores del DTO a una instancia de la entidad original Empleados
+        Nombre = empleadoDTO.Nombre,
+        Apellidos = empleadoDTO.Apellidos,
+        Dni = empleadoDTO.Dni,
+        Correo = empleadoDTO.Correo,
+        Residencia = empleadoDTO.Residencia,
+        Nacionalidad = empleadoDTO.Nacionalidad,
+        TiendaId = empleadoDTO.TiendaId
+    };
 
-            if (empleados == null)
-            {
-                return BadRequest("No se ha encontrado ningún empleado con ese Id");
-            }
+    _dbContext.Empleados.Add(empleado);
+    await _dbContext.SaveChangesAsync();
 
-            // Mapeo manual de Empleados a EmpleadosDTO
-            var empleadoDTO = new EmpleadoDTO
-            {
-                // Asigna los valores de la entidad Empleados a las propiedades correspondientes del DTO
-                Id = empleados.Id,
-                Nombre = empleados.Nombre,
-                // Asigna otros campos necesarios en el DTO
-                // ...
-            };
+    // Mapea la entidad Empleados creada a su correspondiente DTO
+    var nuevoEmpleadoDTO = new EmpleadoDTO
+    {
+        Id = empleado.Id,
+        Nombre = empleado.Nombre,
+        Apellidos = empleado.Apellidos,
+        Dni = empleado.Dni,
+        Correo = empleado.Correo,
+        Residencia = empleado.Residencia,
+        Nacionalidad = empleado.Nacionalidad,
+        TiendaId = empleado.TiendaId
+    };
 
-            return empleadoDTO;
-        }
+    return CreatedAtAction(nameof(GetEmpleado), new { id = nuevoEmpleadoDTO.Id }, nuevoEmpleadoDTO);
+}
 
+[HttpPut("{id}")]
+public async Task<IActionResult> PutEmpleado(int id, EmpleadoDTO empleadoDTO)
+{
+    if (id != empleadoDTO.Id)
+    {
+        return BadRequest();
+    }
 
+    var empleado = await _dbContext.Empleados.FindAsync(id);
 
+    if (empleado == null)
+    {
+        return NotFound();
+    }
 
-        [HttpPost("")]
+    // Realiza cualquier validación o transformación necesaria en el DTO antes de actualizar la entidad
 
-        public async Task<ActionResult<Empleados>> PostEmpleados(Empleados empleados)
-        {
-            _dbContext.Empleados.Add(empleados);
-            await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEmpleados), new { id = empleados.Id }, empleados);
-        }
+    // Actualiza los valores de la entidad original Empleados con los valores del DTO
+    empleado.Nombre = empleadoDTO.Nombre;
+    empleado.Apellidos = empleadoDTO.Apellidos;
+    empleado.Dni = empleadoDTO.Dni;
+    empleado.Correo = empleadoDTO.Correo;
+    empleado.Residencia = empleadoDTO.Residencia;
+    empleado.Nacionalidad = empleadoDTO.Nacionalidad;
+    empleado.TiendaId = empleadoDTO.TiendaId;
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmpleadoss([FromBody] Empleados empleados)
-        {
-            _dbContext.Entry(empleados).State = EntityState.Modified;
+    try
+    {
+        _dbContext.Empleados.Update(empleado);
+        await _dbContext.SaveChangesAsync();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        throw;
+    }
 
-            try
-            {
-                _dbContext.Empleados.Update(empleados);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+    return Ok();
+}
 
-                throw;
-            }
-            return Ok();
-        }
+[HttpDelete("{id}")]
+public async Task<IActionResult> DeleteEmpleado(int id)
+{
+    var empleado = await _dbContext.Empleados.FindAsync(id);
 
-        private bool EmpleadosExists(long id)
-        {
-            return (_dbContext.Empleados?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+    if (empleado == null)
+    {
+        return NotFound();
+    }
 
+    _dbContext.Empleados.Remove(empleado);
+    await _dbContext.SaveChangesAsync();
 
+    return NoContent();
+}
 
-        [HttpDelete("{id}")]
-
-        public async Task<IActionResult> DeleteEmpleados(int id)
-        {
-            if (_dbContext.Empleados == null)
-            {
-                return NotFound();
-            }
-            var empleados = await _dbContext.Empleados.FindAsync(id);
-            if (empleados == null)
-            {
-                return NotFound();
-            }
-            _dbContext.Empleados.Remove(empleados);
-            await _dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
 
     }
 }

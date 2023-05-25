@@ -1,12 +1,13 @@
-// CarritoDTO
-public class CarritoDTO
+// LibrosClientesDTO
+
+public class LibrosClientesDTO
 {
-    public int Id { get; set; }
-    public double? PrecioTotal { get; set; }
-    public int? CantidadProductos { get; set; }
-    public bool? EstadoCarrito { get; set; }
-    public string? MetodosPago { get; set; }
+        public int Id { get; set; }
+        public int? IdCliente { get; set; }
+        public int? Idlibro { get; set; }
+        public string? NombreLibro { get; set; }
 }
+
 
 
 
@@ -46,6 +47,7 @@ public class EmpleadoDTO
     public string? Correo { get; set; }
     public string? Residencia { get; set; }
     public string? Nacionalidad { get; set; }
+    public int TiendaId { get; set; } 
 }
 
 
@@ -60,6 +62,7 @@ public class LibroDTO
     public int? Paginas { get; set; }
     public bool? EnVenta { get; set; }
     public string? FechaPublicacion { get; set; }
+    public int CategoriaId { get; set; } 
 }
 
 
@@ -73,7 +76,8 @@ public class TiendaDTO
     public int? CodigoPostal { get; set; }
     public int? Trabajadores { get; set; }
     public string? HorarioAtencion { get; set; }
-    public int LibroId { get; set; }
+    // public int LibroId { get; set; }
+    
 }
 
 

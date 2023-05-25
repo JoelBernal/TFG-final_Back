@@ -14,5 +14,9 @@ namespace api_librerias_paco.Models
         public string? Residencia { get; set; }
         public string? Nacionalidad { get; set; }
 
+
+            public int TiendaId { get; set; } // Foreign key
+            public Tiendas Tienda { get; set; } // Navigational property
+
     }
 }
