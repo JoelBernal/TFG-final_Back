@@ -32,7 +32,7 @@ public class ClienteDTO
     public string? NombreUser { get; set; }
     public string? Rol { get; set; }
     public decimal? Saldo { get; set; }
-    public string? FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 }
 
 

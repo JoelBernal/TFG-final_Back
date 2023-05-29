@@ -13,7 +13,7 @@ namespace api_librerias_paco.Models
 
         public decimal? Saldo { get; set; }
 
-        public string? FechaCreacion { get; set; }
+        public DateTime? FechaCreacion { get; set; } = DateTime.UtcNow;
 
        
         public virtual ICollection<LibrosClientes> LibrosClientes { get; set; } 

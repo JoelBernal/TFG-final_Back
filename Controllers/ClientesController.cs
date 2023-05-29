@@ -100,6 +100,25 @@ namespace api_librerias_paco.Controllers
             return CreatedAtAction(nameof(GetCliente), new { id = nuevoClienteDTO.Id }, nuevoClienteDTO);
         }
 
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<int>> Login([FromBody] Dictionary<string, string> values)
+        {
+            if (!values.TryGetValue("correo", out string correo) || !values.TryGetValue("contrasenya", out string contrasenya))
+            {
+                return BadRequest("Los campos 'correo' y 'contrasenya' son requeridos.");
+            }
+            int id = _clientesService.Login(correo, contrasenya);
+            if(id == 0){
+                return NotFound("Usuario no encontrado");
+            }
+            return id;
+
+
+        } 
+
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, ClienteDTO clienteDTO)
         {

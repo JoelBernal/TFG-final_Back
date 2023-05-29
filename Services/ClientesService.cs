@@ -36,4 +36,13 @@ public class ClientesService : IClientesRepository
             // Agrega más campos si es necesario
         };
     }
+
+    public int Login (string Correo, string Contrasenya){
+        Clientes cliente = _dbContext.Clientes.FirstOrDefault(c => c.Correo == Correo && c.Contrasenya == Contrasenya);
+        if (cliente == null)
+        {
+            return 0;
+        }
+        return cliente.Id;
+    }
 }
