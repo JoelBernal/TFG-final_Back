@@ -27,7 +27,7 @@ public class LibroService : ILibroRepository
         Precio = libro.Precio,
         Paginas = libro.Paginas,
         EnVenta = libro.EnVenta,
-        FechaPublicacion = libro.FechaPublicacion
+        FechaPublicacion = libro.FechaPublicacion,
     };
 }
 

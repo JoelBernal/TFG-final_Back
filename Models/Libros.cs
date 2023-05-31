@@ -16,7 +16,7 @@ namespace api_librerias_paco.Models
 
         public bool? EnVenta { get; set; }
 
-        public string? FechaPublicacion { get; set; }
+        public DateTime FechaPublicacion { get; set; } = DateTime.UtcNow;
         
         public virtual ICollection<Tiendas> Tiendas { get; set; }
 

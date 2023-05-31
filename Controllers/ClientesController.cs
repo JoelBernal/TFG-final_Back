@@ -70,7 +70,8 @@ namespace api_librerias_paco.Controllers
         public async Task<ActionResult<ClienteDTO>> PostCliente(ClienteDTO clienteDTO)
         {
             // Realiza cualquier validación o transformación necesaria en el DTO antes de guardarlo en la base de datos
-
+            Console.WriteLine(clienteDTO.FechaCreacion);
+            Console.WriteLine("---------------------------------------------------------------");
             var cliente = new Clientes
             {
                 // Mapea los valores del DTO a una instancia de la entidad original Clientes
@@ -79,7 +80,6 @@ namespace api_librerias_paco.Controllers
                 NombreUser = clienteDTO.NombreUser,
                 Rol = clienteDTO.Rol,
                 Saldo = clienteDTO.Saldo,
-                FechaCreacion = clienteDTO.FechaCreacion
             };
 
             _dbContext.Clientes.Add(cliente);
@@ -94,7 +94,6 @@ namespace api_librerias_paco.Controllers
                 NombreUser = cliente.NombreUser,
                 Rol = cliente.Rol,
                 Saldo = cliente.Saldo,
-                FechaCreacion = cliente.FechaCreacion
             };
 
             return CreatedAtAction(nameof(GetCliente), new { id = nuevoClienteDTO.Id }, nuevoClienteDTO);

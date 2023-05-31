@@ -32,7 +32,7 @@ public class ClienteDTO
     public string? NombreUser { get; set; }
     public string? Rol { get; set; }
     public decimal? Saldo { get; set; }
-    public DateTime? FechaCreacion { get; set; }
+    public DateTime FechaCreacion { get; set; }
 }
 
 
@@ -61,7 +61,7 @@ public class LibroDTO
     public string? Autor { get; set; }
     public int? Paginas { get; set; }
     public bool? EnVenta { get; set; }
-    public string? FechaPublicacion { get; set; }
+    public DateTime FechaPublicacion { get; set; }
     public int CategoriaId { get; set; } 
 }
 
