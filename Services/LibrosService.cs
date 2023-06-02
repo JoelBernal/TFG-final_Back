@@ -28,6 +28,8 @@ public class LibroService : ILibroRepository
         Paginas = libro.Paginas,
         EnVenta = libro.EnVenta,
         FechaPublicacion = libro.FechaPublicacion,
+        ISBN = libro.ISBN,
+        Imagen = libro.Imagen,
     };
 }
 

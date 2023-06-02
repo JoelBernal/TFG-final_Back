@@ -47,7 +47,9 @@ namespace api_librerias_paco.Controllers
                     Paginas = l.Paginas,
                     EnVenta = l.EnVenta,
                     FechaPublicacion = l.FechaPublicacion,
-                    CategoriaId = l.CategoriaId
+                    CategoriaId = l.CategoriaId,
+                    ISBN = l.ISBN,
+                    Imagen = l.Imagen
                 });
 
                 return Ok(librosDTO);
@@ -65,7 +67,9 @@ namespace api_librerias_paco.Controllers
                 Paginas = l.Paginas,
                 EnVenta = l.EnVenta,
                 FechaPublicacion = l.FechaPublicacion,
-                CategoriaId = l.CategoriaId
+                CategoriaId = l.CategoriaId,
+                ISBN = l.ISBN,
+                Imagen = l.Imagen
             });
 
             return Ok(librosOrdenadosDTO);
@@ -93,7 +97,9 @@ namespace api_librerias_paco.Controllers
                 Paginas = idlibro.Paginas,
                 EnVenta = idlibro.EnVenta,
                 FechaPublicacion = idlibro.FechaPublicacion,
-                CategoriaId = idlibro.CategoriaId
+                CategoriaId = idlibro.CategoriaId,
+                ISBN = idlibro.ISBN,
+                Imagen = idlibro.Imagen
             };
 
             return LibroDTO;
@@ -115,7 +121,9 @@ namespace api_librerias_paco.Controllers
                 Paginas = libroDTO.Paginas,
                 EnVenta = libroDTO.EnVenta,
                 FechaPublicacion = libroDTO.FechaPublicacion,
-                CategoriaId = libroDTO.CategoriaId
+                CategoriaId = libroDTO.CategoriaId,
+                ISBN = libroDTO.ISBN,
+                Imagen = libroDTO.Imagen
             };
 
             _dbContext.Libro.Add(libro);
@@ -131,7 +139,9 @@ namespace api_librerias_paco.Controllers
                 Paginas = libro.Paginas,
                 EnVenta = libro.EnVenta,
                 FechaPublicacion = libro.FechaPublicacion,
-                CategoriaId = libro.CategoriaId
+                CategoriaId = libro.CategoriaId,
+                ISBN = libro.ISBN,
+                Imagen = libro.Imagen
             };
 
             return CreatedAtAction(nameof(GetLibros), new { id = nuevoLibroDTO.Id }, nuevoLibroDTO);
@@ -162,6 +172,8 @@ namespace api_librerias_paco.Controllers
             libro.EnVenta = libroDTO.EnVenta;
             libro.FechaPublicacion = libroDTO.FechaPublicacion;
             libro.CategoriaId = libroDTO.CategoriaId;
+            libro.ISBN = libroDTO.ISBN;
+            libro.Imagen = libroDTO.Imagen;
 
             try
             {
@@ -212,7 +224,9 @@ namespace api_librerias_paco.Controllers
                 Paginas = libro.Paginas,
                 EnVenta = libro.EnVenta,
                 FechaPublicacion = libro.FechaPublicacion,
-                CategoriaId = libro.CategoriaId
+                CategoriaId = libro.CategoriaId,
+                ISBN = libro.ISBN,
+                Imagen = libro.Imagen
             };
 
             return libroDTO;

@@ -62,7 +62,9 @@ public class LibroDTO
     public int? Paginas { get; set; }
     public bool? EnVenta { get; set; }
     public DateTime FechaPublicacion { get; set; }
+    public int ISBN { get; set; }
     public int CategoriaId { get; set; } 
+    public string Imagen {get; set;}
 }
 
 
