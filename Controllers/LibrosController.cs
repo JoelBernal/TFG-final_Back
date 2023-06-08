@@ -12,9 +12,11 @@ namespace api_librerias_paco.Controllers
     public class LibrosController : ControllerBase
     {
         private readonly LibreriaContext _dbContext;
-        public LibrosController(LibreriaContext dbContext)
+        private readonly ILogger<LibrosController> _logger;
+        public LibrosController(LibreriaContext dbContext, ILogger<LibrosController> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         // GET: api/Libros

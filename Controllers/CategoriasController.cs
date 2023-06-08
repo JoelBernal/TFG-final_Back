@@ -12,9 +12,11 @@ namespace api_librerias_paco.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly LibreriaContext _dbContext;
-        public CategoriasController(LibreriaContext dbContext)
+        private readonly ILogger<CategoriasController> _logger;
+        public CategoriasController(LibreriaContext dbContext, ILogger<CategoriasController> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
 

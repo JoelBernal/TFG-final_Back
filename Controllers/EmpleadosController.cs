@@ -10,12 +10,14 @@ namespace api_librerias_paco.Controllers
     public class EmpleadosController : ControllerBase
     {
         private readonly LibreriaContext _dbContext;
+        private readonly ILogger<EmpleadosController> _logger;
 
         private readonly EmpleadoService _empleadosService;
-        public EmpleadosController(LibreriaContext dbContext, EmpleadoService empleadosService)
+        public EmpleadosController(LibreriaContext dbContext, EmpleadoService empleadosService, ILogger<EmpleadosController> logger)
         {
             _dbContext = dbContext;
             _empleadosService = empleadosService;
+            _logger = logger;
         }
 
 [HttpGet("")]

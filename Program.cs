@@ -44,6 +44,15 @@ builder.Services.AddCors(options =>
 // [Newtonsoft.Json.JsonProperty(PropertyName="properties.token")]
 // public string Token { get; set; }
 
+
+//Logs
+builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddFile("logs/logs.txt"); });
+
+//dotnet add package Serilog.Extensions.Logging.File --version 3.0.0 
+//dotnet add package Microsoft.Extensions.Logging --version 7.0.0
+
+
+
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
