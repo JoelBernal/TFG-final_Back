@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+    api:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "5616:80"
+        environment:
+            ConnectionStrings__DefaultConnection: "Server=tcp:apitfgfinal.database.windows.net,1433;Initial Catalog=BbddApiTfgFinal;Persist Security Info=False;User ID=TfgFinalJoelEnrique;Password=Mandangon123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
